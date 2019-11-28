@@ -21,13 +21,18 @@ namespace comp110_worksheet_7
 			return File.GetAttributes(path).HasFlag(FileAttributes.Directory);
 		}
 
+        public static string[] GetFiles(string directory)
+        {
+            return Directory.GetFiles(directory, "*.*", SearchOption.AllDirectories);
+        }
+
 		// Return the total size, in bytes, of all the files below the given directory
 		public static long GetTotalSize(string directory)
 		{
             long total = 0;
-            foreach (FileInfo file in new DirectoryInfo(directory).EnumerateFiles())
+            foreach (string file in GetFiles(directory))
             {
-                total += file.Length;
+                total += GetFileSize(file);
             }
             return total;
         }
@@ -35,7 +40,7 @@ namespace comp110_worksheet_7
 		// Return the number of files (not counting directories) below the given directory
 		public static int CountFiles(string directory)
 		{
-            return new DirectoryInfo(directory).GetFiles().Length;
+            return GetFiles(directory).Length;
 		}
 
 		// Return the nesting depth of the given directory. A directory containing only files (no subdirectories) has a depth of 0.
@@ -57,18 +62,18 @@ namespace comp110_worksheet_7
 		{
             string fileName = null;
             long fileSize = -1;
-            foreach(FileInfo file in new DirectoryInfo(directory).EnumerateFiles())
+            foreach(string file in GetFiles(directory))
             {
                 if(fileName == null || fileSize == -1)
                 {
-                    fileName = file.Name;
-                    fileSize = file.Length;
+                    fileName = file;
+                    fileSize = GetFileSize(file);
                     continue;
                 }
-                if(file.Length < fileSize)
+                if(GetFileSize(file) < fileSize)
                 {
-                    fileName = file.Name;
-                    fileSize = file.Length;
+                    fileName = file;
+                    fileSize = GetFileSize(file);
                 }
             }
             return new Tuple<string, long>(fileName, fileSize);
@@ -79,19 +84,20 @@ namespace comp110_worksheet_7
 		{
             string fileName = null;
             long fileSize = -1;
-            foreach (FileInfo file in new DirectoryInfo(directory).EnumerateFiles())
+            foreach (string file in GetFiles(directory))
             {
                 if (fileName == null || fileSize == -1)
                 {
-                    fileName = file.Name;
-                    fileSize = file.Length;
+                    fileName = file;
+                    fileSize = GetFileSize(file);
                     continue;
                 }
-                if (file.Length > fileSize)
+                if (GetFileSize(file) > fileSize)
                 {
-                    fileName = file.Name;
-                    fileSize = file.Length;
+                    fileName = file;
+                    fileSize = GetFileSize(file);
                 }
+                Console.WriteLine($"{file} at {GetFileSize(file)} bytes");
             }
             return new Tuple<string, long>(fileName, fileSize);
 		}
@@ -100,10 +106,10 @@ namespace comp110_worksheet_7
 		public static IEnumerable<string> GetFilesOfSize(string directory, long size)
 		{
             List<string> list = new List<string>();
-            foreach (FileInfo file in new DirectoryInfo(directory).GetFiles())
+            foreach (string file in GetFiles(directory))
             {
-                if (file.Length == size)
-                    list.Add(file.FullName);
+                if (GetFileSize(file) == size)
+                    list.Add(file);
             }
 
             return list;
