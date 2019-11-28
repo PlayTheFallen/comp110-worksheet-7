@@ -72,6 +72,12 @@ namespace comp110_worksheet_7_tests
 		public void TestGetFilesOfSize256()
 		{
 			Assert.AreEqual(0, DirectoryUtils.GetFilesOfSize(c_baseDirectory, 256).Count());
-		}
-	}
+        }
+
+        [Test]
+        public void TestGetDepth()
+        {
+            Assert.AreEqual(2, DirectoryUtils.GetDepth(c_baseDirectory));
+        }
+    }
 }
