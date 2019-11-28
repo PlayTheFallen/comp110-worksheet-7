@@ -48,10 +48,10 @@ namespace comp110_worksheet_7
 		{
             int depth = 0;
             string[] directories = Directory.GetDirectories(directory);
-            if (directories.Length == 0) return 0;
-            foreach(string dir in directories)
+            if (directories.Length == 0) return depth;
+            foreach (string dir in directories)
             {
-                int _depth = GetDepth(dir);
+                int _depth = GetDepth(dir) + 1;
                 if (_depth > depth) depth = _depth;
             }
             return depth;
